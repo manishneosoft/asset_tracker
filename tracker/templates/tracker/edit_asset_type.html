@@ -1,0 +1,144 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdminLTE Dashboard</title>
+  <!-- AdminLTE CSS -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <script src="{% static 'plugins/jsgrid/demos/db.js' %}"></script>
+  <script src="{% static 'plugins/jquery/jquery.js' %}"></script>
+  <script src="{% static 'plugins/jsgrid/jsgrid.min.js' %}"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Navbar content goes here -->
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="index3.html" class="brand-link">
+        <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Asset Tracker</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <a href="{% url 'sysadmin_dashboard' %}" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'manage_asset_types' %}" class="nav-link">
+                <i class="nav-icon fas fa-cubes"></i>
+                <p>
+                  Asset Type Manager
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'manage_assets' %}" class="nav-link">
+                <i class="nav-icon fas fa-box"></i>
+                <p>
+                  Asset Manager
+                </p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'logout' %}" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                Sign out
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper vh-100">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Edit Asset Type</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">Edit Asset Type</h3>
+                </div>
+                <div class="card-body">
+                  <form action="{% url 'edit_assettype' asset_type.id %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label for="name">Name</label>
+                      <input type="text" class="form-control" id="name" name="name" value="{{ asset_type.name }}" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Description</label>
+                      <textarea class="form-control" id="description" name="description" placeholder="Description" rows="3">{{ asset_type.description }}</textarea>
+                    </div>
+                    <div class="form-group">
+                      <label for="created_at">Created At</label>
+                      <input type="text" class="form-control" id="created_at" name="created_at" value="{{ asset_type.created_at }}" readonly>
+                    </div>
+                    <div class="form-group">
+                      <label for="updated_at">Updated At</label>
+                      <input type="text" class="form-control" id="updated_at" name="updated_at" value="{{ asset_type.updated_at }}" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    {% if error_message %}
+                      <div class="alert alert-danger" role="alert">
+                        {{ error_message }}
+                      </div>
+                    {% elif success_message %}
+                      <div class="alert alert-success" role="alert">
+                        {{ success_message }}
+                      </div>
+                    {% endif %}
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+      <!-- Footer content goes here -->
+    </footer>
+  </div>
+
+</body>
+</html>

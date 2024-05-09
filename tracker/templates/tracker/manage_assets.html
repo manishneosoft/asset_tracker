@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AdminLTE Dashboard</title>
+  <!-- AdminLTE CSS -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.css">
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.css">
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.js"></script>
+</head>
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Navbar content goes here -->
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Brand Logo -->
+      <a href="index3.html" class="brand-link">
+        <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">Asset Tracker</span>
+      </a>
+
+      <!-- Sidebar -->
+      <div class="sidebar os-host os-theme-light os-host-overflow os-host-overflow-y os-host-resize-disabled os-host-scrollbar-horizontal-hidden os-host-transition">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <li class="nav-item">
+              <a href="{% url 'sysadmin_dashboard' %}" class="nav-link">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Dashboard
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'manage_asset_types' %}" class="nav-link">
+                <i class="nav-icon fas fa-cubes"></i>
+                <p>
+                  Asset Type Manager
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'manage_assets' %}" class="nav-link">
+                <i class="nav-icon fas fa-box"></i>
+                <p>
+                  Asset Manager
+                </p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'logout' %}" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                Sign out
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper vh-100">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Asset Manager</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /.content-header -->
+
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-header">
+                  <h3 class="card-title">All registered assets</h3>
+                  <div class="card-tools">
+                    <a href="{% url 'addasset' %}" class="btn btn-primary">
+                      Add new
+                    </a>
+                    <span style="margin: 0 0.5em"></span>
+                    <a href="{% url 'assets_csv' %}" class="btn btn-primary">
+                        Download CSV
+                    </a>
+                  </div>
+                </div>
+                <!-- /.card-header -->
+                
+                <div class="card-body">
+                  <table id="adminTable" class="table table-bordered table-striped">
+                      <thead>
+                          <tr>
+                              <th>Name</th>
+                              <th>Asset Type</th>
+                              <th>Asset code</th>
+                              <th>Status</th>
+                              <th>Created On</th>
+                              <th>Updated On</th>
+                              <th>Options</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for asset in assets %}
+                              <tr>
+                                  <td>{{ asset.name }}</td>
+                                  <td>{{ asset.asset_type.name }}</td>
+                                  <td>{{ asset.code }}</td>
+                                  <td>
+                                      {% if asset.is_active %}
+                                          <span class="badge bg-success">Active</span>
+                                      {% else %}
+                                          <span class="badge bg-danger">Inactive</span>
+                                      {% endif %}
+                                  </td>
+                                  <td>{{ asset.created_at|date:"d M Y H:i" }}</td>
+                                  <td>{{ asset.updated_at|date:"d M Y H:i" }}</td>
+                                  <td>
+                                      <a href="{% url 'edit_asset' asset.pk %}" class="btn btn-warning btn-sm">
+                                          <i class="fas fa-edit">edit</i>
+                                      </a>
+                                      <button onclick="deleteAsset({{ asset.pk }})" class="btn btn-danger btn-sm">
+                                          Delete
+                                      </button>
+                                  </td>
+                              </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                
+                  <!-- Add pagination links -->
+                  <div class="pagination">
+                      {% if assets.has_previous %}
+                          <a href="{% url 'manage_assets' %}?page={{ assets.previous_page_number }}">Previous</a>
+                      {% endif %}
+                      {% for num in assets.paginator.page_range %}
+                          {% if num == assets.number %}
+                              <span>{{ num }}</span>
+                          {% else %}
+                              <a href="{% url 'manage_assets' %}?page={{ num }}">{{ num }}</a>
+                          {% endif %}
+                      {% endfor %}
+                      {% if assets.has_next %}
+                          <a href="{% url 'manage_assets' %}?page={{ assets.next_page_number }}">Next</a>
+                      {% endif %}
+                  </div>
+                </div>
+      
+                  <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+      <!-- Footer content goes here -->
+    </footer>
+  </div>
+
+  <!-- AdminLTE JavaScript -->
+  <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Pie Chart for Asset Types
+    var ctx = document.getElementById('assetTypeChart').getContext('2d');
+    var assetTypeChart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Monitors', 'Mice', 'Keyboards'],
+        datasets: [{
+          label: 'Asset Types',
+          data: [10, 20, 30],
+          backgroundColor: [
+            '#FF6384',
+            '#36A2EB',
+            '#FFCE56'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
+
+    // Bar Chart for Active vs. Inactive Assets
+    var ctx = document.getElementById('assetStatusChart').getContext('2d');
+    var assetStatusChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Active', 'Inactive'],
+        datasets: [{
+          label: 'Asset Status',
+          data: [80, 20],
+          backgroundColor: [
+            '#36A2EB',
+            '#FF6384'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+
+    function deleteAsset(assetTypeId) {
+  if (confirm("Are you sure")) {
+    window.location.href = `/delete_asset/${assetTypeId}/`;
+  }
+};
+$(document).ready(function() {
+    $('#adminTable').DataTable({
+        "paging": true,
+        "pageLength": 5,
+        "lengthChange": false,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+    });
+});
+  </script>
+  
+
+</body>
+</html>
+
+
