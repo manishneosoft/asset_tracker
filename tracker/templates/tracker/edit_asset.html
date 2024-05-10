@@ -23,7 +23,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="{% url 'sysadmin_dashboard' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Asset Tracker</span>
       </a>
@@ -107,7 +107,10 @@
                     </div>
                     <div class="form-group">
                       <label for="is_active">Is Active</label>
-                      <input type="checkbox" class="form-control" id="is_active" name="is_active" {% if asset.is_active %}checked{% endif %}>
+                      <div class="custom-control custom-switch">
+                        <input type="checkbox" class="custom-control-input" id="is_active" name="is_active" {% if asset.is_active %}checked{% endif %}>
+                        <label class="custom-control-label" for="is_active"></label>
+                      </div>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                     {% if error_message %}

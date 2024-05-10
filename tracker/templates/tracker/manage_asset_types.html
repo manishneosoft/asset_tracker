@@ -23,7 +23,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="{% url 'sysadmin_dashboard' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Asset Tracker</span>
       </a>
@@ -136,10 +136,12 @@
                           <a href="{% url 'manage_asset_types' %}?page={{ asset_types.previous_page_number }}">Previous</a>
                       {% endif %}
                       {% for num in asset_types.paginator.page_range %}
-                          {% if num == asset_types.number %}
-                              <span>{{ num }}</span>
-                          {% else %}
-                              <a href="{% url 'manage_asset_types' %}?page={{ num }}">{{ num }}</a>
+                          {% if asset_types.paginator.num_pages > 1 and num > 0 %}
+                              {% if num == asset_types.number %}
+                                  <span>{{ num }}</span>
+                              {% else %}
+                                  <a href="{% url 'manage_asset_types' %}?page={{ num }}">{{ num }}</a>
+                              {% endif %}
                           {% endif %}
                       {% endfor %}
                       {% if asset_types.has_next %}

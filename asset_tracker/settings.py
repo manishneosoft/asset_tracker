@@ -19,7 +19,14 @@ load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+CORS_ALLOWED_ORIGINS = [
+    "5e0c-125-99-115-211.ngrok-free.app",
+    # Add other allowed origins if needed
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://5e0c-125-99-115-211.ngrok-free.app",
+    # Add other trusted origins if needed
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -30,7 +37,7 @@ SECRET_KEY = 'django-insecure-0zlu+*qf0x7z37ni=+i)13rm629!d$g-=$mrah(q=946ybkpys
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*','localhost','5e0c-125-99-115-211.ngrok-free.app','*.ngrok-free.app']
 
 # Session settings
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -131,6 +138,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),

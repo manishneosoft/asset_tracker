@@ -23,7 +23,7 @@
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="index3.html" class="brand-link">
+      <a href="{% url 'sysadmin_dashboard' %}" class="brand-link">
         <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">Asset Tracker</span>
       </a>
@@ -146,18 +146,20 @@
                 
                   <!-- Add pagination links -->
                   <div class="pagination">
-                      {% if assets.has_previous %}
-                          <a href="{% url 'manage_assets' %}?page={{ assets.previous_page_number }}">Previous</a>
-                      {% endif %}
-                      {% for num in assets.paginator.page_range %}
-                          {% if num == assets.number %}
-                              <span>{{ num }}</span>
-                          {% else %}
-                              <a href="{% url 'manage_assets' %}?page={{ num }}">{{ num }}</a>
+                      {% if assets.has_previous or assets.paginator.num_pages > 1 %}
+                          {% if assets.has_previous %}
+                              <a href="{% url 'manage_assets' %}?page={{ assets.previous_page_number }}">Previous</a>
                           {% endif %}
-                      {% endfor %}
-                      {% if assets.has_next %}
-                          <a href="{% url 'manage_assets' %}?page={{ assets.next_page_number }}">Next</a>
+                          {% for num in assets.paginator.page_range %}
+                              {% if num == assets.number %}
+                                  <span>{{ num }}</span>
+                              {% else %}
+                                  <a href="{% url 'manage_assets' %}?page={{ num }}">{{ num }}</a>
+                              {% endif %}
+                          {% endfor %}
+                          {% if assets.has_next %}
+                              <a href="{% url 'manage_assets' %}?page={{ assets.next_page_number }}">Next</a>
+                          {% endif %}
                       {% endif %}
                   </div>
                 </div>
