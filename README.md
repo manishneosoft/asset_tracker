@@ -4,15 +4,20 @@ This is a Django web application for tracking Asset. It provides functionality t
 
 ## Installation
 
+1. Git Clone from GitHub
+
+    ```bash
+    git clone https://github.com/manishneosoft/asset_tracker
+    ```
 
 
-1. Create a virtual environment:
+2. Create a virtual environment:
 
     ```bash
     python3 -m venv myenv
     ```
 
-2. Activate the virtual environment:
+3. Activate the virtual environment:
 
     - On Windows:
 
